@@ -1,22 +1,28 @@
-from game.Board import Board
-from network.Player import Player
-from socket import socket, AF_INET, SOCK_STREAM
+from time import time
+from game.TicTacToeBoard import TicTacToeBoard
+from game.Player import Player
+
 
 class GameRoom:
 
-    def __init__(self, x: Player, o: Player, board: Board):
+    def __init__(self, x: Player, o: Player, board: TicTacToeBoard):
         self.__players = [x, o]
-        self.__current_player = x
+        self.__current_player = self.__players[0]
         self.__board = board
-        self.__socket = socket(AF_INET, SOCK_STREAM)
 
     def __change_turn(self):
         self.__current_player = self.__players[0] if self.__current_player == self.__players[1] else self.__players[1]
 
-    def __turn(self, coordinates):
-        #self.__change_turn()
-        self.__current_player.move(coordinates)
-
     def run(self):
-        while self.__board.there_are_moves():
-            pass
+        start = time()
+        winner = None
+        while not winner:
+            valid_move = None
+            while not valid_move:
+                move = self.__current_player.make_move()
+                valid_move = self.__board.make_move(move, self.__current_player.square)
+            self.__change_turn()
+            winner = self.__board.check_win()
+        end = time()
+        for p in self.__players:
+            p.end_game(winner=winner, time_taken=end - start)
