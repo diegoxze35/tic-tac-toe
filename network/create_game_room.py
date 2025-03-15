@@ -8,7 +8,7 @@ from network.GameRoom import GameRoom
 
 def create_game_room(difficulty, square, user_socket: socket, single_player=True):
     board = TicTacToeBoard(n=3 if int(difficulty) == 1 else 5)
-    player_1: Player = HumanPlayer(square, user_socket)
+    player_1: Player = HumanPlayer(square, user_socket, is_valid_move=board.is_valid_move)
     player_2: Player
     if square == 'X':
         player_2 = RandomComputerPlayer(board, square='O', player_socket=user_socket) if single_player else None

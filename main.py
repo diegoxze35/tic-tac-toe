@@ -1,7 +1,6 @@
-from datetime import date
 import sys
+from datetime import date
 from socket import socket, AF_INET, SOCK_STREAM
-import pickle
 
 from network.GameRoom import GameRoom
 from network.create_game_room import create_game_room
@@ -23,18 +22,18 @@ if __name__ == '__main__':
     else:
         exit('Usage: python main.py <ip> <port>')
     with socket(AF_INET, SOCK_STREAM) as s:
+        s.setblocking(True)
         s.bind((ip, port))
         s.listen()
         print('Waiting for connection...')
         conn, addr = s.accept()
         with conn:
             print('Connected by', addr)
-            msg, params = pickle.loads(conn.recv(2048))
+            command = conn.recv(8).decode()
+            msg, difficulty, square = command.split(',')
             room: GameRoom
             match msg:
-                case 'START':
-                    difficulty = params['difficulty']
-                    square = params['square']
+                case 'GAME':
                     room = create_game_room(difficulty=difficulty, square=square, user_socket=conn)
                     room.run()
                 case 'JOIN':

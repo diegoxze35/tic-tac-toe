@@ -17,10 +17,12 @@ class GameRoom:
         start = time()
         winner = None
         while not winner:
-            valid_move = None
+            valid_move = False
+            x: int = -1
+            y: int = -1
             while not valid_move:
-                move = self.__current_player.make_move()
-                valid_move = self.__board.make_move(move, self.__current_player.square)
+                x, y, valid_move = self.__current_player.make_move()
+            self.__board.make_move((x, y), self.__current_player.square)
             self.__change_turn()
             winner = self.__board.check_win()
         end = time()

@@ -6,7 +6,7 @@ class Player(ABC):
         self.square = square
 
     @abstractmethod
-    def make_move(self) -> tuple[int, int]:
+    def make_move(self) -> tuple[int, int, bool]:
         pass
 
     @abstractmethod

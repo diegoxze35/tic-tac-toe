@@ -8,7 +8,7 @@ class TicTacToeBoard:
     def __init__(self, n: int = 3):
         self.__squares: list[list[Square]] = [[Square.EMPTY for _ in range(n)] for _ in range(n)]
 
-    def __is_valid_move(self, move: tuple[int, int]) -> bool:
+    def is_valid_move(self, move: tuple[int, int]) -> bool:
         x, y = move
         n = len(self.__squares)
         if (0 <= x < n) and (0 <= y < n):
@@ -16,11 +16,8 @@ class TicTacToeBoard:
                 return True
         return False
 
-    def make_move(self, move: tuple[int, int], square: str) -> tuple[int, int] | None:
-        if not self.__is_valid_move(move):
-            return None
+    def make_move(self, move: tuple[int, int], square: str) -> None:
         self.__squares[move[0]][move[1]] = Square(square)
-        return move
 
     def get_available_moves(self) -> list[tuple[int, int]]:
         moves: list[tuple[int]] = []
@@ -49,9 +46,9 @@ class TicTacToeBoard:
         # Verificando las columnas
         for i in range(n):
             #for column in [self.__squares[i][j] for j in range(n)]:
-            if all(map(lambda square: square == Square.X, [self.__squares[i][j] for j in range(n)])):
+            if all(map(lambda square: square == Square.X, [self.__squares[j][i] for j in range(n)])):
                 return 'X'
-            if all(map(lambda square: square == Square.O, [self.__squares[i][j] for j in range(n)])):
+            if all(map(lambda square: square == Square.O, [self.__squares[j][i] for j in range(n)])):
                 return 'O'
         # Verificando las columnas
 

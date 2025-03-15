@@ -1,7 +1,6 @@
 from game.TicTacToeBoard import TicTacToeBoard
 from game.Player import Player
 import random
-import pickle
 from socket import socket
 
 class RandomComputerPlayer(Player):
@@ -16,11 +15,11 @@ class RandomComputerPlayer(Player):
         moves = self.__board.get_available_moves()
         selected_move = random.choice(moves)
         self._notify_move(selected_move)
-        return selected_move
+        return selected_move + (True, )
 
     def _notify_move(self, move: tuple[int, int]) -> None:
-        command = ('OPONNET_MOVE', {'coordinates': move, 'square': f' {self.square} '})
-        self.__player_socket.send(pickle.dumps(command))
+        command = f'MOVE,{move[0]},{move[1]}, {self.square} '
+        self.__player_socket.send(command.encode())
         print(f'Computer\'s move = {move}')
 
     def end_game(self, winner: str, time_taken: float) -> None:
