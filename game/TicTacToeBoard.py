@@ -8,13 +8,15 @@ class TicTacToeBoard:
     def __init__(self, n: int = 3):
         self.__squares: list[list[Square]] = [[Square.EMPTY for _ in range(n)] for _ in range(n)]
 
-    def is_valid_move(self, move: tuple[int, int]) -> bool:
+    def is_valid_move(self, move: tuple[int, int]) -> tuple[str,bool]:
         x, y = move
         n = len(self.__squares)
         if (0 <= x < n) and (0 <= y < n):
             if self.__squares[x][y] == Square.EMPTY:
-                return True
-        return False
+                return 'MOVE OK', True
+            else:
+                return 'ISTAKEN', False
+        return 'NORANGE', False
 
     def make_move(self, move: tuple[int, int], square: str) -> None:
         self.__squares[move[0]][move[1]] = Square(square)
