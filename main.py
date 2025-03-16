@@ -13,7 +13,9 @@ if __name__ == '__main__':
     lived_days_1 = (march_10_2025 - date_1).days
     lived_days_2 = (march_10_2025 - date_2).days
     print(lived_days_1 % 3, lived_days_2 % 3)
-
+    """
+    Misma comfiguración del cliente hasta el momento
+    """
     ip: str
     port: int
     if len(sys.argv) == 3:
@@ -27,14 +29,24 @@ if __name__ == '__main__':
         s.listen()
         print('Waiting for connection...')
         conn, addr = s.accept()
+        """
+        Una vez aceptada la conexión, creamos una "sala de juego"'
+        """
         with conn:
             print('Connected by', addr)
-            command = conn.recv(8).decode()
-            msg, difficulty, square = command.split(',')
+            command = conn.recv(8).decode() #Mensajes de control limitados a 8 bytes
+            msg, difficulty, square = command.split(',') #Esto se modificara cuando halla más mensajes de control
             room: GameRoom
             match msg:
                 case 'GAME':
+                    """
+                    Recivimos la instrucción del cliente de jugar contra la máquina con la dificultad
+                    y casilla 'X' o 'O' escojidas
+                    """
                     room = create_game_room(difficulty=difficulty, square=square, user_socket=conn)
-                    room.run()
-                case 'JOIN':
+                    room.run()  #Este metodo debe de ser ejecutado en un hilo para permitir multiconexión
+                case 'JOIN': #Mensaje reservado para que otro jugador humano entre a una partida con otro jugador humano
+                    """
+                    Aún no implementado
+                    """
                     raise NotImplementedError
