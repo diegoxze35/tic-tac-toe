@@ -8,7 +8,10 @@ class TicTacToeBoard:
     def __init__(self, n: int = 3):
         self.__squares: list[list[Square]] = [[Square.EMPTY for _ in range(n)] for _ in range(n)]
 
-    def is_valid_move(self, move: tuple[int, int]) -> tuple[str,bool]:
+    def __len__(self):
+        return len(self.__squares)
+
+    def is_valid_move(self, move: tuple[int, int]) -> tuple[str, bool]:
         x, y = move
         n = len(self.__squares)
         if (0 <= x < n) and (0 <= y < n):
@@ -47,7 +50,7 @@ class TicTacToeBoard:
 
         # Verificando las columnas
         for i in range(n):
-            #for column in [self.__squares[i][j] for j in range(n)]:
+            # for column in [self.__squares[i][j] for j in range(n)]:
             if all(map(lambda square: square == Square.X, [self.__squares[j][i] for j in range(n)])):
                 return 'X'
             if all(map(lambda square: square == Square.O, [self.__squares[j][i] for j in range(n)])):

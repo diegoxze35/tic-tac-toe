@@ -4,6 +4,10 @@ from game.TicTacToeBoard import TicTacToeBoard
 from game.Player import Player
 import random
 from socket import socket
+import logging
+
+logging.basicConfig(level=logging.INFO, format='(%(threadName)-10s) %(message)s')
+
 
 class RandomComputerPlayer(Player):
     """
@@ -30,15 +34,15 @@ class RandomComputerPlayer(Player):
         moves = self.__board.get_available_moves()
         selected_move = random.choice(moves)
         self._notify_move(selected_move)
-        return selected_move + (True, )
+        return selected_move + (True,)
 
     @override
     def _notify_move(self, move: tuple[int, int]) -> None:
         command = f'MOVE,{move[0]},{move[1]}, {self.square} '
-        self.__player_socket.send(command.encode()) #Enviar movimiento al jugador humano
+        self.__player_socket.send(command.encode())  # Enviar movimiento al jugador humano
         print(f'Computer\'s move = {move}')
 
     @override
     def end_game(self, winner: str, time_taken: float) -> None:
-        print(f'Winner {winner}')
-        print(f'Time taken: {time_taken} seconds')
+        logging.info(f'Winner is {winner}')
+        logging.info(f'Time taken is {time_taken}')
